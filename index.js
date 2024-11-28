@@ -13,48 +13,51 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import axios from 'axios';
 import { isReadable } from 'stream';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
+
 const app = express();
 const port = 3000;
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 const folderPath = path.join(__dirname, "public/uploads/images");
 
-
-// إعدادات القوالب والمجلدات
+// Setup templates and static folder
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/', express.static(path.join(__dirname, 'public')));
+
 if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath, { recursive: true });
 }
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, folderPath);
-  },
-  filename: function (req, file, cb) {
-    // Generate a unique filename while keeping the original extension
-    const extname = path.extname(file.originalname).toLowerCase();
-    console.log(extname)
-    const validExtensions = ['.jpeg', '.png','.jpg'];
+        cb(null, folderPath);
+    },
+    filename: function (req, file, cb) {
+        const extname = path.extname(file.originalname).toLowerCase();
+        console.log(extname);
+        const validExtensions = ['.jpeg', '.png', '.jpg'];
 
-    // If the file extension is valid, proceed to save it with a unique name
-    if (validExtensions.includes(extname)) {
-      cb(null, Date.now() + extname); // Adding a unique timestamp to the file name
-    } else {
-      cb(new Error('Invalid file type'), false); // Reject the file if it's not a valid type
+        if (validExtensions.includes(extname)) {
+            cb(null, Date.now() + extname); // Add unique timestamp to the file name
+        } else {
+            cb(new Error('Invalid file type'), false); // Reject invalid file types
+        }
     }
-  }
 });
 const upload = multer({
-  storage: storage,
-  fileFilter: storage[0]
+    storage: storage,
+    fileFilter: storage[0]
 });
 
-// إعداد الجلسات
+// Setup sessions
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'secret',
+    secret: process.env.SESSION_SECRET, // Use session secret from .env
     resave: false,
     saveUninitialized: false
 }));
@@ -62,29 +65,25 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-// إعداد قاعدة البيانات
+// Setup database connection
 const db = new pg.Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'book_notes',
-    password: 'root',
-    port: 5000 // تأكد من استخدام المنفذ الصحيح
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
 });
 db.connect();
 
-
-
-
-
+// Define a middleware to check if the user is logged in
 const isLoggedIn = (req, res, next) => {
     if (req.session.user) {
-        // User is logged in, redirect to home
-        return res.redirect('/');
+        return res.redirect('/'); // User is logged in, redirect to home
     }
-   else{
-    next();
-   } // User is not logged in, proceed to the login route
-  };
+    next(); // User is not logged in, proceed to the next route
+};
+
+// Passport Local Strategy for user login
 passport.use(new LocalStrategy(async (username, password, done) => {
     try {
         const user = await db.query("SELECT * FROM users WHERE username = $1", [username]);
@@ -114,68 +113,62 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-const GOOGLE_CLIENT_ID = '358313498074-nkc7bafg3j3fliqvq63m65q3vqlko9df.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = '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';
+// Google OAuth Strategy
 passport.use(new GoogleStrategy({
-    clientID:     GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/google/callback",
-    passReqToCallback   : true
-  },
-  async (request, accessToken, refreshToken, profile, done) => {
+    passReqToCallback: true
+},
+async (request, accessToken, refreshToken, profile, done) => {
     try {
-      // Check if the user exists in the database
-      let userResult = await db.query("SELECT * FROM users WHERE google_id = $1", [profile.id]);
-      
-      if (userResult.rows.length === 0) {
-        // If user doesn't exist, create a new one
-        const newUser = await db.query(
-          "INSERT INTO users (username, email, google_id) VALUES ($1, $2, $3) RETURNING *",
-          [profile.displayName, profile.emails[0].value, profile.id]
-        );
-        return done(null, newUser.rows[0]);
-      }
+        let userResult = await db.query("SELECT * FROM users WHERE google_id = $1", [profile.id]);
+        
+        if (userResult.rows.length === 0) {
+            const newUser = await db.query(
+                "INSERT INTO users (username, email, google_id) VALUES ($1, $2, $3) RETURNING *",
+                [profile.displayName, profile.emails[0].value, profile.id]
+            );
+            return done(null, newUser.rows[0]);
+        }
 
-      // User exists
-      return done(null, userResult.rows[0]);
+        return done(null, userResult.rows[0]);
     } catch (error) {
-      return done(error, null);
+        return done(error, null);
     }
-  }
-));
+}));
+
 passport.serializeUser((user, done) => {
     done(null, user.id); // Serialize the user's ID
 });
+
 passport.deserializeUser(async (id, done) => {
-  try {
-    const userResult = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-    if (userResult.rows.length === 0) {
-      return done(new Error("User not found"), null);
+    try {
+        const userResult = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+        if (userResult.rows.length === 0) {
+            return done(new Error("User not found"), null);
+        }
+        done(null, userResult.rows[0]); // Pass the user object
+    } catch (err) {
+        done(err, null);
     }
-    done(null, userResult.rows[0]); // Pass the user object
-  } catch (err) {
-    done(err, null);
-  }
 });
+
+// Profile route
 app.get("/profile", async (req, res) => {
     try {
-        // Check if the user is authenticated via Google OAuth (Passport)
         let user;
         if (req.user) {
-            // Google OAuth user
             user = req.user;
         } else if (req.session.user) {
-            // Local login (bcrypt + express-session)
             const result = await db.query("SELECT * FROM users WHERE id = $1", [req.session.user]);
             user = result.rows[0];
         }
 
         if (user) {
-            // Render profile page if the user is found
-            req.flash('success', 'Wlecome to your profile !');
-            res.render("profile.ejs", {messages: req.flash(), user: user});
+            req.flash('success', 'Welcome to your profile!');
+            res.render("profile.ejs", { messages: req.flash(), user: user });
         } else {
-            // If no user is authenticated, redirect to login page
             res.redirect("/login");
         }
     } catch (err) {
@@ -184,22 +177,26 @@ app.get("/profile", async (req, res) => {
     }
 });
 
-  
-// تمرير رسائل الفلاش
+// Flash messages
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
-    res.locals.error  = req.flash('error');
+    res.locals.error = req.flash('error');
     next();
-  });
+});
+
+// Google OAuth routes
 app.get("/auth/google", passport.authenticate("google", { scope: ["email", "profile"] }));
 
 app.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.redirect("/profile");
-  }
+    "/google/callback",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    (req, res) => {
+        res.redirect("/profile");
+    }
 );
+
+// Start the server
+
 
 app.get("/book", async (req, res) => {
    
