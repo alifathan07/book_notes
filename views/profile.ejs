@@ -1,0 +1,200 @@
+<%- include('layouts/header.ejs', { user: user }) %>
+
+<!-- Hero Section -->
+<% if (locals.user) { %>
+ 
+    <div id="main-content" style="display: none;">
+        <html><head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <style>
+    
+        .card {
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 15px 1px rgba(16, 131, 62, 0.08);
+        }
+        .card {
+            position: relative;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid #e5e9f2;
+            border-radius: .2rem;
+        }
+        .card-header:first-child {
+            border-radius: calc(.2rem - 1px) calc(.2rem - 1px) 0 0;
+        }
+        .card-header {
+            border-bottom-width: 1px;
+        }
+        .card-header {
+            padding: .75rem 1.25rem;
+            margin-bottom: 0;
+            color: inherit;
+            background-color: #fff;
+            border-bottom: 1px solid #e5e9f2;
+        }
+        .list-group-item.active {
+        background-color: #4ade80 !important; /* Green background */
+        border-color: #4ade80 !important;    /* Green border */
+        color: white !important;             /* White text for better contrast */
+    }
+        </style>
+        </head>
+        <body>
+            <div class="container p-0">
+        
+            <h1 class="h3 mb-3">Settings</h1>
+        
+            <div class="row">
+                <div class="col-md-5 col-xl-4">
+        
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Profile Settings</h5>
+                        </div>
+                        <div id="messages">
+                            <% if (messages && messages.success) { %>
+                                <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-green-100 dark:text-green-800" role="alert" id="alert">
+                                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                    </svg>
+                                    <%= messages.success %>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="list-group list-group-flush" role="tablist">
+                            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account" role="tab" aria-selected="true">
+                              Account
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="list" href="#password" role="tab" aria-selected="false">
+                              Password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 col-xl-8">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="account" role="tabpanel">
+        
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-actions float-right">
+                                        <div class="dropdown show">
+                                            <a href="#" data-toggle="dropdown" data-display="static">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle">
+                                                    <circle cx="12" cy="12" r="1"></circle>
+                                                    <circle cx="19" cy="12" r="1"></circle>
+                                                    <circle cx="5" cy="12" r="1"></circle>
+                                                </svg>
+                                            </a>
+        
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="card-title mb-0">Public info</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form action="/update/user" method="POST" enctype="multipart/form-data">
+                                        <div class="row">
+                                          <div class="col-md-8">
+                                            <div class="form-group">
+                                              <label for="inputUsername">Username</label>
+                                              <input type="text" class="form-control" id="inputUsername" name="username" value="<%= user.username %>">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="inputEmail4">Email</label>
+                                              <input type="email" class="form-control" id="inputEmail4" name="email" value="<%= user.email %>">
+                                            </div>
+                                          </div>
+                                          <div class="col-md-4">
+                                            <div class="text-center">
+                                              <img src="/uploads/images/<%= user.image %>" class="rounded-circle img-responsive mt-2" width="128" height="128">
+                                              <div class="mt-2">
+                                                <label for="upload-input" class="btn btn-primary" style="background-color: #4ade80; cursor: pointer;">
+                                                  Upload
+                                                </label>
+                                                <input id="upload-input" type="file" name="image" style="display: none;">
+                                                <input type="hidden" name="existingImage" value="<%= user.image %>">
+                                              </div>
+                                              <small>Use an image at least 128px by 128px in .jpg format</small>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background-color : #4ade80">Save changes</button>
+                                      </form>
+                                      
+                                </div>
+                            </div>
+        
+                            
+        
+                        </div>
+                        <div class="tab-pane fade" id="password" role="tabpanel">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Password</h5>
+        
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="inputPasswordCurrent">Current password</label>
+                                            <input type="password" class="form-control" id="inputPasswordCurrent">
+                                            <small><a href="#">Forgot your password?</a></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew">New password</label>
+                                            <input type="password" class="form-control" id="inputPasswordNew">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPasswordNew2">Verify password</label>
+                                            <input type="password" class="form-control" id="inputPasswordNew2">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" style="background-color : #4ade80">Save changes</button>
+                                    </form>
+        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        
+        <script type="text/javascript"></script></body><script id="allow-copy_script" src="chrome-extension://aefehdhdciieocakfobpaaolhipkcpgc/content_scripts/copy.js"></script></html>
+    
+    <%- include('layouts/footer.ejs') %>
+    
+    </div>
+<% } else { %>
+ <script>
+     // Set a timeout to hide the flash message after 2 seconds
+    // Redirect to a specific URL after a short delay (optional)
+setTimeout(() => {
+    window.location.href = "/login"; // Replace with your target URL
+}, 1000); // Delay in milliseconds (2000ms = 2 seconds)1
+
+// If no delay is needed, use the line below instead:
+// window.location.href = "https://example.com";
+
+ </script>
+<% } %> 
+<script>
+     setTimeout(() => {
+        document.getElementById("messages").style.display = "none"; // Hide the message
+    }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
+
+</script>

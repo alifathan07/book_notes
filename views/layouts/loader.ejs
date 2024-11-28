@@ -1,0 +1,13 @@
+<div class="loader" id="loader"></div>
+<script>
+     window.onload = function () {
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        const mainContent = document.getElementById('main-content');
+
+        // Hide loader and show main content
+        loader.style.display = 'none';
+        mainContent.style.display = 'block';
+      }, 2000); // 2 seconds delay
+    };
+</script>

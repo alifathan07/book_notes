@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Notes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* From Uiverse.io by scissorsdog */ 
+.loader__balls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 300px;
+}
+.loader__balls__group {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  height: 100px;
+  width: 40px;
+}
+.ball {
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  position: absolute;
+  transform-origin: bottom;
+}
+
+/* ANIMATION BALL 1*/
+.loader__balls__group :nth-child(1) {
+  background-color: #4ade80;
+  animation-name: jumpinBallAnimation1;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+}
+@keyframes jumpinBallAnimation1 {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  10% {
+    transform: translateY(0) scale(1.3, 0.8);
+  }
+  11% {
+    transform: translateY(0) scale(0.7, 1.2);
+    animation-timing-function: cubic-bezier(0, 0, 0.5, 1);
+  }
+  39% {
+    transform: translateY(-75px) scale(1);
+    animation-timing-function: cubic-bezier(0, 0, 0.5, 1);
+  }
+  40% {
+    transform: translateY(-75px) scale(1);
+  }
+  41% {
+    transform: translateY(-75px) scale(1);
+    animation-timing-function: cubic-bezier(1, 0, 1, 0);
+  }
+  69% {
+    transform: translateY(0px) scale(1, 1);
+    animation-timing-function: cubic-bezier(1, 0, 1, 0);
+  }
+  70% {
+    transform: translateY(0) scale(1.5, 0.4);
+  }
+  80% {
+    transform: translateY(0) scale(0.8, 1.2);
+  }
+  90% {
+    transform: translateY(0) scale(1.1, 0.8);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+/* ANIMATION BALL 2*/
+.loader__balls__group :nth-child(2) {
+  background-color: #4ade80;
+  animation-name: jumpinBallAnimation2;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+}
+@keyframes jumpinBallAnimation2 {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  10% {
+    transform: translateY(0) scale(1.3, 0.8);
+  }
+  11% {
+    transform: translateY(0) scale(0.7, 1.2);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+  }
+  39% {
+    transform: translateY(-75px) scale(1);
+    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+  }
+  40% {
+    transform: translateY(-75px) scale(1);
+  }
+  41% {
+    transform: translateY(-75px) scale(1);
+    animation-timing-function: cubic-bezier(1, 0, 1, 0.5);
+  }
+  69% {
+    transform: translateY(0px) scale(1, 1);
+    animation-timing-function: cubic-bezier(1, 0, 1, 0.5);
+  }
+  70% {
+    transform: translateY(0) scale(1.5, 0.4);
+  }
+  80% {
+    transform: translateY(0) scale(0.8, 1.2);
+  }
+  90% {
+    transform: translateY(0) scale(1.1, 0.8);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+/* ANIMATION BALL 3*/
+.loader__balls__group :nth-child(3) {
+  background-color: #4ade80;
+  animation-name: jumpinBallAnimation3;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+}
+@keyframes jumpinBallAnimation3 {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  10% {
+    transform: translateY(0) scale(1.3, 0.8);
+  }
+  11% {
+    transform: translateY(0) scale(0.7, 1.2);
+    animation-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+  39% {
+    transform: translateY(-75px) scale(1);
+    animation-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+  40% {
+    transform: translateY(-75px) scale(1);
+  }
+  41% {
+    transform: translateY(-75px) scale(1);
+    animation-timing-function: cubic-bezier(1, 0, 1, 1);
+  }
+  69% {
+    transform: translateY(0px) scale(1, 1);
+    animation-timing-function: cubic-bezier(1, 0, 1, 1);
+  }
+  70% {
+    transform: translateY(0) scale(1.5, 0.4);
+  }
+  80% {
+    transform: translateY(0) scale(0.8, 1.2);
+  }
+  90% {
+    transform: translateY(0) scale(1.1, 0.8);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+}
+.loader__balls__group .item1 {
+  animation-delay: 0ms;
+}
+.loader__balls__group .item2 {
+  animation-delay: 100ms;
+}
+.loader__balls__group .item3 {
+  animation-delay: 200ms;
+}
+
+  </style>
+</head>
+<body>
+  <style>
+    .group:hover .group-hover\\:block {
+    display: block;
+}
+
+  </style>
+  <!-- Loader -->
+
+  
+
+
+  <!-- Main Content -->
+  
+  
+  <header class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <img src="https://i.pinimg.com/736x/dd/64/da/dd64da585bc57cb05e5fd4d8ce873f57.jpg" alt="Logo" class="h-10 w-10 rounded-full">
+          <span class="text-xl font-bold text-gray-800" style="color: #4ade80;">BOOK NOTES</span>
+        </div>
+  
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex space-x-6">
+          <a href="/" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Home</a>
+  
+          <% if (locals.user) { %>
+            <!-- Dropdown for Books -->
+            <div class="relative group">
+              <a href="/book" class="text-gray-600 hover:text-blue-500 flex items-center space-x-1" style="color: #4ade80;">
+                Books
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 w-48 z-50">
+                <a href="/favorites/<%= user.id %>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" style="color: #4ade80;">Favorites</a>
+                <a href="/readlater/<%= user.id %>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" style="color: #4ade80;">Read Later</a>
+              </div>
+            </div>
+            
+  
+            <form action="/logout" method="POST">
+              <button type="submit" class="text-gray-600 hover:text-blue-500" style="color: #4ade80; background: none; border: none; cursor: pointer;">
+                Logout
+              </button>
+            </form>
+  
+          <% } else { %>
+            <a href="/login" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Login</a>
+            <a href="/register" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Register</a>
+          <% } %>
+        </nav>
+  
+        <!-- Mobile Menu Toggle -->
+        <div class="md:hidden">
+          <button id="menu-btn" class="text-gray-800 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-100" style="color: #4ade80;">
+      <nav class="space-y-2 py-4 px-4">
+        <% if (locals.user) { %>
+          <a href="/dashboard" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Dashboard</a>
+          <a href="/favorites" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Favorites</a>
+          <form action="/logout" method="POST">
+            <a type="submit" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Logout</a>
+          </form>
+        <% } else { %>
+          <a href="/login" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Login</a>
+          <a href="/register" class="text-gray-600 hover:text-blue-500" style="color: #4ade80;">Register</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+  
+    <div class="loader" id="loader">
+      <div class="loader__balls">
+        <div class="loader__balls__group">
+          <div class="ball item1"></div>
+          <div class="ball item1"></div>
+          <div class="ball item1"></div>
+        </div>
+        <div class="loader__balls__group">
+          <div class="ball item2"></div>
+          <div class="ball item2"></div>
+          <div class="ball item2"></div>
+        </div>
+        <div class="loader__balls__group">
+          <div class="ball item3"></div>
+          <div class="ball item3"></div>
+          <div class="ball item3"></div>
+        </div>
+      </div>
+    </div>  
+    
+  
+
+  <script>
+    // Hide the loader and show the main content
+    
+
+    // Mobile Menu Toggle Script
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    window.onload = function () {
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        const mainContent = document.getElementById('main-content');
+
+        // Hide loader and show main content
+        loader.style.display = 'none';
+        mainContent.style.display = 'block';
+      }, 1000); // 2 seconds delay
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.querySelector('.group');
+    const dropdownMenu = dropdown.querySelector('div');
+
+    dropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        dropdownMenu.classList.add('hidden');
+    });
+});
+
+  </script>
+</body>
+</html>
